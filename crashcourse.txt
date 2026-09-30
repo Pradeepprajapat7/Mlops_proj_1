@@ -155,4 +155,4 @@ mrpradeepkumhar6264_db_user
 
 mCJdTDsLXXdTpjlN
 
-# connection string - mongodb+srv://mrpradeepkumhar6264_db_user:<db_password>@cluster0.twyi3rw.mongodb.net/?appName=Cluster0
+# connection string - mongodb+srv://mrpradeepkumhar6264_db_user:mCJdTDsLXXdTpjlN@cluster0.twyi3rw.mongodb.net/?appName=Cluster0
