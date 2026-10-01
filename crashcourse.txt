@@ -153,6 +153,13 @@ After following these steps, the runner should be persistently running as a back
 
 mrpradeepkumhar6264_db_user
 
-mCJdTDsLXXdTpjlN
+mCJdTDsLXXdTpjlN - password
 
 # connection string - mongodb+srv://mrpradeepkumhar6264_db_user:mCJdTDsLXXdTpjlN@cluster0.twyi3rw.mongodb.net/?appName=Cluster0
+
+mongodb+srv://mrpradeepkumhar6264_db_user:ZWkycyk0EjW5axql@cluster0.twyi3rw.mongodb.net/?appName=Cluster0
+
+*** For Powershell ***
+    set: $env:MONGODB_URL = "mongodb+srv://mrpradeepkumhar6264_db_user:ZWkycyk0EjW5axql@cluster0.twyi3rw.mongodb.net/?appName=Cluster0"
+
+    check: echo $env:MONGODB_URL

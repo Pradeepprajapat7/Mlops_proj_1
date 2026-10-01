@@ -1,9 +1,9 @@
-from setuptools import setup, find_packages
+from setuptools import find_packages, setup  # type: ignore[import-not-found]
 
 setup(
     name="src",
     version="0.0.1",
-    author="Vikash Das",
-    author_email="vikashdas770@gmail.com",
+    author="Pradeep Prajapat",
+    author_email="mr.pradeepkumhar6264@gmail.com",
     packages=find_packages()
 )
