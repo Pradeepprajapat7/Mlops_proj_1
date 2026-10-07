@@ -1,4 +1,5 @@
 import os
+import re
 import sys
 from pathlib import Path
 from urllib.parse import urlparse
@@ -9,6 +10,8 @@ import certifi
 from src.exception import MyException
 from src.logger import logging
 from src.constants import DATABASE_NAME, MONGODB_URL_KEY
+
+_ENV_KEY_RE = re.compile(r"^[A-Z][A-Z0-9_]*$")
 
 
 def _parse_env_file() -> dict[str, str]:
@@ -22,7 +25,10 @@ def _parse_env_file() -> dict[str, str]:
         if not line or line.startswith("#") or "=" not in line:
             continue
         key, value = line.split("=", 1)
-        values[key.strip()] = value.strip().strip('"').strip("'")
+        key = key.strip()
+        if not _ENV_KEY_RE.match(key):
+            continue
+        values[key] = value.strip().strip('"').strip("'")
     return values
 
 

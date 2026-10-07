@@ -1,9 +1,10 @@
 import sys
-from typing import Tuple
+from typing import Any, Literal, Tuple, cast
 
 import numpy as np
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_score
+from sklearn.pipeline import Pipeline
 
 from src.exception import MyException
 from src.logger import logging
@@ -22,7 +23,9 @@ class ModelTrainer:
         self.data_transformation_artifact = data_transformation_artifact
         self.model_trainer_config = model_trainer_config
 
-    def get_model_object_and_report(self, train: np.ndarray, test: np.ndarray) -> Tuple[object, object]:
+    def get_model_object_and_report(
+        self, train: np.ndarray, test: np.ndarray
+    ) -> Tuple[RandomForestClassifier, ClassificationMetricArtifact]:
         """
         Method Name :   get_model_object_and_report
         Description :   This function trains a RandomForestClassifier with specified parameters
@@ -43,7 +46,10 @@ class ModelTrainer:
                 min_samples_split = self.model_trainer_config._min_samples_split,
                 min_samples_leaf = self.model_trainer_config._min_samples_leaf,
                 max_depth = self.model_trainer_config._max_depth,
-                criterion = self.model_trainer_config._criterion,
+                criterion=cast(
+                    Literal["gini", "entropy", "log_loss"],
+                    self.model_trainer_config._criterion,
+                ),
                 random_state = self.model_trainer_config._random_state
             )
 
@@ -60,7 +66,11 @@ class ModelTrainer:
             recall = recall_score(y_test, y_pred)
 
             # Creating metric artifact
-            metric_artifact = ClassificationMetricArtifact(f1_score=f1, precision_score=precision, recall_score=recall)
+            metric_artifact = ClassificationMetricArtifact(
+                f1_score=float(f1),
+                precision_score=float(precision),
+                recall_score=float(recall),
+            )
             return model, metric_artifact
         
         except Exception as e:
@@ -88,7 +98,10 @@ class ModelTrainer:
             logging.info("Model object and artifact loaded.")
             
             # Load preprocessing object
-            preprocessing_obj = load_object(file_path=self.data_transformation_artifact.transformed_object_file_path)
+            preprocessing_obj = cast(
+                Pipeline,
+                load_object(file_path=self.data_transformation_artifact.transformed_object_file_path),
+            )
             logging.info("Preprocessing obj loaded.")
 
             # Check if the model's accuracy meets the expected threshold
@@ -98,7 +111,8 @@ class ModelTrainer:
 
             # Save the final model object that includes both preprocessing and the trained model
             logging.info("Saving new model as performace is better than previous one.")
-            my_model = MyModel(preprocessing_object=preprocessing_obj, trained_model_object=trained_model)
+            trained_model_object = cast(Any, trained_model)
+            my_model = MyModel(preprocessing_object=preprocessing_obj, trained_model_object=trained_model_object)
             save_object(self.model_trainer_config.trained_model_file_path, my_model)
             logging.info("Saved final model object that includes both preprocessing and the trained model")
 

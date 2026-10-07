@@ -160,11 +160,10 @@ mCJdTDsLXXdTpjlN - password
 mongodb+srv://mrpradeepkumhar6264_db_user:ZWkycyk0EjW5axql@cluster0.twyi3rw.mongodb.net/?appName=Cluster0
 
 *** For Powershell ***
-    set: $env:MONGODB_URL = "mongodb+srv://mrpradeepkumhar6264_db_user:VGvuIXVbtkDLAKhB@cluster0.twyi3rw.mongodb.net/?appName=Cluster0"
+    set: $env:MONGODB_URL = "mongodb+srv://mrpradeepkumhar6264_db_user:echo $env:MONGODB_URL@cluster0.twyi3rw.mongodb.net/?appName=Cluster0"
 
     check: echo $env:MONGODB_URL
 
-    $env:MONGODB_URL = "mongodb+srv://USER:ZVplJgkfV9ctipDv@cluster0.twyi3rw.mongodb.net/?retryWrites=true&w=majority"
+    $env:MONGODB_URL = "mongodb+srv://USER:KmUsFJPUNxixdls3@cluster0.twyi3rw.mongodb.net/?retryWrites=true&w=majority"
+python -c "from pymongo import MongoClient; import os; c=MongoClient(os.environ['MONGODB_URL']); print(c.admin.command('ping'))"
 
-#user name - mrpradeepkumhar6264
-@password - pn8TsNds5PXtv7hepython 
