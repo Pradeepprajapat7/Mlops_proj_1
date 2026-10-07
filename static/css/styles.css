@@ -1,0 +1,309 @@
+/* Vehicle insurance desk */
+:root {
+    --ink: #15111f;
+    --paper: rgba(255, 250, 244, 0.88);
+    --line: rgba(255, 255, 255, 0.45);
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    margin: 0;
+    min-height: 100%;
+}
+
+body {
+    font-family: "Outfit", Arial, sans-serif;
+    color: var(--ink);
+    background:
+        radial-gradient(1200px 700px at 10% -10%, #ff7a59 0%, transparent 42%),
+        radial-gradient(900px 600px at 100% 0%, #21c7b0 0%, transparent 40%),
+        radial-gradient(800px 500px at 80% 100%, #ffd166 0%, transparent 45%),
+        linear-gradient(160deg, #2b124c 0%, #10243e 48%, #0b3b3c 100%);
+    padding: 32px 16px 48px;
+}
+
+.scene {
+    position: fixed;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(8px);
+    opacity: 0.7;
+    animation: drift 14s ease-in-out infinite;
+}
+
+.orb-coral {
+    width: 280px;
+    height: 280px;
+    background: #ff5d8f;
+    top: 8%;
+    left: -60px;
+}
+
+.orb-teal {
+    width: 340px;
+    height: 340px;
+    background: #3ee0c5;
+    right: -80px;
+    top: 18%;
+    animation-delay: -4s;
+}
+
+.orb-gold {
+    width: 220px;
+    height: 220px;
+    background: #ffc857;
+    bottom: 6%;
+    left: 28%;
+    animation-delay: -8s;
+}
+
+.road {
+    position: absolute;
+    left: 50%;
+    bottom: -40px;
+    width: 140%;
+    height: 180px;
+    transform: translateX(-50%) rotate(-4deg);
+    background: repeating-linear-gradient(
+        90deg,
+        rgba(255, 255, 255, 0.08) 0 28px,
+        transparent 28px 56px
+    );
+    mask-image: linear-gradient(to top, rgba(0, 0, 0, 0.35), transparent);
+}
+
+@keyframes drift {
+    0%,
+    100% { transform: translateY(0) scale(1); }
+    50% { transform: translateY(-22px) scale(1.05); }
+}
+
+.page {
+    position: relative;
+    z-index: 1;
+    width: min(980px, 100%);
+    margin: 0 auto;
+}
+
+.hero {
+    color: #fff8ee;
+    margin-bottom: 22px;
+}
+
+.badge {
+    display: inline-block;
+    margin: 0 0 12px;
+    padding: 6px 12px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.16);
+    border: 1px solid rgba(255, 255, 255, 0.28);
+    font-size: 13px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.hero h1 {
+    font-family: "Fraunces", Georgia, serif;
+    font-size: clamp(2rem, 5vw, 3.4rem);
+    line-height: 1.1;
+    margin: 0 0 10px;
+    max-width: 14ch;
+}
+
+.lede {
+    margin: 0;
+    max-width: 46ch;
+    color: #ffe8c8;
+    font-size: 1.05rem;
+}
+
+.panel {
+    background: var(--paper);
+    backdrop-filter: blur(16px);
+    border: 1px solid var(--line);
+    border-radius: 28px;
+    padding: 22px;
+    box-shadow:
+        0 30px 60px rgba(24, 8, 48, 0.35),
+        inset 0 1px 0 rgba(255, 255, 255, 0.7);
+}
+
+.panel-top {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    align-items: flex-start;
+    margin-bottom: 18px;
+}
+
+.panel-top h2 {
+    margin: 0;
+    font-family: "Fraunces", Georgia, serif;
+    font-size: 1.5rem;
+}
+
+.panel-top p {
+    margin: 6px 0 0;
+    color: #5c4d63;
+}
+
+.stat-pills {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.stat-pills span {
+    background: #15111f;
+    color: #ffe29a;
+    border-radius: 999px;
+    padding: 7px 12px;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.field-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+}
+
+.field {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 12px;
+    border-radius: 18px;
+    text-align: left;
+    border: 1px solid rgba(21, 17, 31, 0.08);
+}
+
+.field span {
+    font-weight: 700;
+}
+
+.field small {
+    color: #5d5066;
+}
+
+.field input {
+    margin-top: 6px;
+    width: 100%;
+    padding: 10px 12px;
+    border: 0;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.78);
+    font: inherit;
+    outline: none;
+    box-shadow: inset 0 0 0 1px rgba(21, 17, 31, 0.08);
+}
+
+.field input:focus {
+    box-shadow: inset 0 0 0 2px #15111f;
+}
+
+.field-rose { background: linear-gradient(180deg, #ffd3e0, #ffb7c9); }
+.field-amber { background: linear-gradient(180deg, #ffe7b3, #ffcf70); }
+.field-teal { background: linear-gradient(180deg, #c8fff2, #86f0db); }
+.field-violet { background: linear-gradient(180deg, #e4d7ff, #c7b0ff); }
+.field-lime { background: linear-gradient(180deg, #e4ffb8, #c6f06a); }
+.field-gold { background: linear-gradient(180deg, #fff1c2, #ffd56a); }
+.field-sky { background: linear-gradient(180deg, #cfefff, #8fd4ff); }
+.field-coral { background: linear-gradient(180deg, #ffd8c8, #ff9f7a); }
+.field-mint { background: linear-gradient(180deg, #d9ffe8, #8af0b8); }
+.field-indigo { background: linear-gradient(180deg, #d7dcff, #9aa6ff); }
+.field-hot {
+    background: linear-gradient(180deg, #ffd0f1, #ff7ac8);
+    grid-column: 1 / -1;
+}
+
+.actions,
+.train-form {
+    margin-top: 16px;
+}
+
+button {
+    width: 100%;
+    border: 0;
+    cursor: pointer;
+    font: inherit;
+    font-weight: 700;
+    font-size: 1.05rem;
+    padding: 14px 16px;
+    border-radius: 16px;
+    color: #fff;
+    transition: transform 0.15s ease, filter 0.15s ease;
+}
+
+button:hover {
+    transform: translateY(-1px);
+    filter: brightness(1.05);
+}
+
+.btn-predict {
+    background: linear-gradient(90deg, #ff4d6d, #ff8c42 55%, #ffd166);
+    box-shadow: 0 12px 24px rgba(255, 77, 109, 0.35);
+}
+
+.train-button {
+    background: linear-gradient(90deg, #12b886, #15aabf);
+    box-shadow: 0 12px 24px rgba(18, 184, 134, 0.32);
+}
+
+.result {
+    margin-top: 18px;
+    padding: 16px 18px;
+    border-radius: 18px;
+    text-align: left;
+}
+
+.result p {
+    margin: 0;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.result h2 {
+    margin: 4px 0 0;
+    font-family: "Fraunces", Georgia, serif;
+    font-size: 1.8rem;
+}
+
+.result-yes {
+    background: linear-gradient(90deg, #d3f9d8, #8ce99a);
+    color: #0b3d1d;
+}
+
+.result-no {
+    background: linear-gradient(90deg, #ffe3e3, #ffa8a8);
+    color: #7a1020;
+}
+
+@media (max-width: 720px) {
+    .field-grid,
+    .panel-top {
+        grid-template-columns: 1fr;
+        display: grid;
+    }
+
+    .field-hot {
+        grid-column: auto;
+    }
+
+    .hero h1 {
+        max-width: none;
+    }
+}

@@ -2,10 +2,11 @@ import os
 import re
 import sys
 from pathlib import Path
-from urllib.parse import urlparse
+from urllib.parse import quote_plus, urlparse, urlunparse
 
 import pymongo
 import certifi
+from pymongo.errors import OperationFailure, ConfigurationError
 
 from src.exception import MyException
 from src.logger import logging
@@ -32,9 +33,17 @@ def _parse_env_file() -> dict[str, str]:
     return values
 
 
-def _mongo_username(mongo_db_url: str) -> str:
+def _encode_mongo_url(mongo_db_url: str) -> str:
+    """Percent-encode user and password so special characters do not break auth."""
     parsed = urlparse(mongo_db_url)
-    return parsed.username or ""
+    if not parsed.hostname or parsed.username is None:
+        return mongo_db_url
+    user = quote_plus(parsed.username)
+    password = quote_plus(parsed.password or "")
+    host = parsed.hostname
+    if parsed.port:
+        host = f"{host}:{parsed.port}"
+    return urlunparse(parsed._replace(netloc=f"{user}:{password}@{host}"))
 
 
 def _load_env_file() -> None:
@@ -42,10 +51,9 @@ def _load_env_file() -> None:
     for key, value in file_values.items():
         os.environ.setdefault(key, value)
 
-    # A leftover session URI with the placeholder user "USER" must not win over .env.
-    session_url = os.getenv(MONGODB_URL_KEY, "")
+    # Project .env is the source of truth so a stale PowerShell MONGODB_URL cannot win.
     file_url = file_values.get(MONGODB_URL_KEY)
-    if file_url and (not session_url or _mongo_username(session_url) == "USER"):
+    if file_url:
         os.environ[MONGODB_URL_KEY] = file_url
 
 
@@ -90,20 +98,29 @@ class MongoDBClient:
         try:
             # Check if a MongoDB client connection has already been established; if not, create a new one
             if MongoDBClient.client is None:
-                mongo_db_url = os.getenv(MONGODB_URL_KEY)  # Retrieve MongoDB URL from environment variables
+                mongo_db_url = os.getenv(MONGODB_URL_KEY)
                 if mongo_db_url is None:
                     raise Exception(f"Environment variable '{MONGODB_URL_KEY}' is not set.")
-                
-                # Establish a new MongoDB client connection
-                MongoDBClient.client = pymongo.MongoClient(mongo_db_url, tlsCAFile=ca)
-                
-            # Use the shared MongoClient for this instance
+
+                MongoDBClient.client = pymongo.MongoClient(
+                    _encode_mongo_url(mongo_db_url),
+                    tlsCAFile=ca,
+                    serverSelectionTimeoutMS=20000,
+                )
+
             self.client = MongoDBClient.client
-            self.database = self.client[database_name]  # Connect to the specified database
+            self.database = self.client[database_name]
             self.database_name = database_name
             self.client.admin.command("ping")
             logging.info("MongoDB connection successful.")
-            
+
+        except (OperationFailure, ConfigurationError) as e:
+            MongoDBClient.client = None
+            raise MyException(
+                "MongoDB authentication failed. Update MONGODB_URL in the project .env "
+                "with a current Atlas database user and password, then restart the app.",
+                sys,
+            ) from e
         except Exception as e:
-            # Raise a custom exception with traceback details if connection fails
+            MongoDBClient.client = None
             raise MyException(e, sys)

@@ -1,0 +1,6 @@
+[ 2026-10-07 15:45:18,739 ] asyncio - DEBUG - Using proactor: IocpProactor
+[ 2026-10-07 15:46:26,747 ] root - INFO - Entered get_usvisa_data_as_dict method as VehicleData class
+[ 2026-10-07 15:46:26,753 ] root - INFO - Created vehicle data dict
+[ 2026-10-07 15:46:26,760 ] root - INFO - Exited get_vehicle_data_as_dict method as VehicleData class
+[ 2026-10-07 15:46:26,795 ] root - INFO - Entered predict method of VehicleDataClassifier class
+[ 2026-10-07 15:46:26,799 ] root - ERROR - Error occurred in python script: [C:\MLOPs\Mlops_proj_1\src\pipline\prediction_pipeline.py] at line number [101]: Environment variable: AWS_ACCESS_KEY_ID is not not set.

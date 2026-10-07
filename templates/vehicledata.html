@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vehicle Insurance Prediction</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/styles.css">
+</head>
+<body>
+    <div class="scene" aria-hidden="true">
+        <span class="orb orb-coral"></span>
+        <span class="orb orb-teal"></span>
+        <span class="orb orb-gold"></span>
+        <span class="road"></span>
+    </div>
+
+    <main class="page">
+        <header class="hero">
+            <p class="badge">Live risk desk</p>
+            <h1>Will this driver buy vehicle insurance?</h1>
+            <p class="lede">Drop in the customer profile and get an instant yes or no from the trained model.</p>
+        </header>
+
+        <section class="panel">
+            <div class="panel-top">
+                <div>
+                    <h2>Customer snapshot</h2>
+                    <p>Every field feeds the same pipeline your training job uses.</p>
+                </div>
+                <div class="stat-pills">
+                    <span>11 signals</span>
+                    <span>Instant score</span>
+                </div>
+            </div>
+
+            <form method="post" action="/" class="predict-form">
+                <div class="field-grid">
+                    <label class="field field-rose">
+                        <span>Gender</span>
+                        <small>1 Male · 0 Female</small>
+                        <input type="number" id="Gender" name="Gender" min="0" max="1" required>
+                    </label>
+
+                    <label class="field field-amber">
+                        <span>Age</span>
+                        <small>Customer age in years</small>
+                        <input type="number" id="Age" name="Age" required>
+                    </label>
+
+                    <label class="field field-teal">
+                        <span>Driving license</span>
+                        <small>0 No · 1 Yes</small>
+                        <input type="number" id="Driving_License" name="Driving_License" min="0" max="1" required>
+                    </label>
+
+                    <label class="field field-violet">
+                        <span>Region code</span>
+                        <small>Numeric region id</small>
+                        <input type="number" step="0.01" id="Region_Code" name="Region_Code" required>
+                    </label>
+
+                    <label class="field field-lime">
+                        <span>Previously insured</span>
+                        <small>0 No · 1 Yes</small>
+                        <input type="number" id="Previously_Insured" name="Previously_Insured" min="0" max="1" required>
+                    </label>
+
+                    <label class="field field-gold">
+                        <span>Annual premium</span>
+                        <small>Quoted premium amount</small>
+                        <input type="number" step="0.01" id="Annual_Premium" name="Annual_Premium" required>
+                    </label>
+
+                    <label class="field field-sky">
+                        <span>Policy sales channel</span>
+                        <small>Channel code</small>
+                        <input type="number" step="0.01" id="Policy_Sales_Channel" name="Policy_Sales_Channel" required>
+                    </label>
+
+                    <label class="field field-coral">
+                        <span>Vintage</span>
+                        <small>Days with the company</small>
+                        <input type="number" id="Vintage" name="Vintage" required>
+                    </label>
+
+                    <label class="field field-mint">
+                        <span>Vehicle age &lt; 1 year</span>
+                        <small>0 No · 1 Yes</small>
+                        <input type="number" id="Vehicle_Age_lt_1_Year" name="Vehicle_Age_lt_1_Year" min="0" max="1" required>
+                    </label>
+
+                    <label class="field field-indigo">
+                        <span>Vehicle age &gt; 2 years</span>
+                        <small>0 No · 1 Yes</small>
+                        <input type="number" id="Vehicle_Age_gt_2_Years" name="Vehicle_Age_gt_2_Years" min="0" max="1" required>
+                    </label>
+
+                    <label class="field field-hot">
+                        <span>Vehicle damage</span>
+                        <small>0 No · 1 Yes</small>
+                        <input type="number" id="Vehicle_Damage_Yes" name="Vehicle_Damage_Yes" min="0" max="1" required>
+                    </label>
+                </div>
+
+                <div class="actions">
+                    <button type="submit" class="btn-predict">Predict interest</button>
+                </div>
+            </form>
+
+            <form method="get" action="/train" class="train-form">
+                <button type="submit" class="train-button">Train model</button>
+            </form>
+
+            {% if context and context != "Rendering" %}
+                <div class="result {% if context == 'Response-Yes' %}result-yes{% else %}result-no{% endif %}">
+                    <p>Model decision</p>
+                    <h2>{{ context }}</h2>
+                </div>
+            {% endif %}
+        </section>
+    </main>
+</body>
+</html>
